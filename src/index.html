@@ -4,15 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Image Segmentation App</title>
+  <link rel="stylesheet" href="index.css">
 </head>
 <body>
-  <h1>Image Segmentation App</h1>
-  <p>Upload an image and hover over it to get the color of the pixel.</p>
-  <input type="file" id="imageUpload" accept="image/*">
-  <div id="imageContainer"></div>
-  <canvas id="imageCanvas"></canvas>
-  <div id="colorDisplay">Hover over image to get color</div>
-
+  <div class="container">
+    <header>
+      <h1>Image Segmentation App</h1>
+      <p>Upload an image and hover over it to get the color of the pixel.</p>
+    </header>
+    <main>
+      <input type="file" id="imageUpload" accept="image/*">
+      <div id="imageContainer">
+        <canvas id="imageCanvas"></canvas>
+      </div>
+      <div id="colorDisplay">Hover over image to get color</div>
+    </main>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>
