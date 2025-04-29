@@ -13,13 +13,24 @@
       <p>Upload an image and hover over it to get the color of the pixel.</p>
     </header>
     <main>
+      <label for="imageUpload">Upload Image</label>
       <input type="file" id="imageUpload" accept="image/*">
       <div id="imageContainer">
         <canvas id="imageCanvas"></canvas>
       </div>
+      <div>
+        <label for="colorFilter">Show:</label>
+        <select id="colorFilter">
+          <option value="all">All</option>
+          <option value="blue">Blue</option>
+          <option value="green">Green</option>
+          <option value="yellow">Yellow</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
       <div id="colorDisplay">Hover over image to get color</div>
     </main>
   </div>
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>
