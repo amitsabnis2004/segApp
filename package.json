@@ -1,8 +1,8 @@
 {
-  "name": "segapp",
-  "productName": "segapp",
-  "version": "1.0.0",
-  "description": "My Electron application description",
+  "name": "hbn-thickness-analyzer",
+  "productName": "HBN Thickness Analyzer",
+  "version": "2.0.0",
+  "description": "Advanced 2D nanomaterial thickness detection software for hexagonal boron nitride analysis",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -11,15 +11,14 @@
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
   },
-  "keywords": [],
+  "keywords": ["nanomaterial", "2d-materials", "hbn", "boron-nitride", "thickness-analysis", "microscopy", "materials-science"],
   "author": {
     "name": "amitsabnis2004",
     "email": "asabnis2@gitam.in"
   },
   "license": "MIT",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.1",
-    "segapp": "file:"
+    "electron-squirrel-startup": "^1.0.1"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.7.0",
