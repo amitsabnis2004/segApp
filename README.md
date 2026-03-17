@@ -1,216 +1,138 @@
-# HBN Thickness Analyzer
+# Nanoflake Thickness Platform
 
-![HBN Analyzer](https://img.shields.io/badge/Material-Science-blue) ![Electron](https://img.shields.io/badge/Electron-47848F?style=flat&logo=electron&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
+A reworked full-stack application for thickness estimation of 2D nanomaterial flakes from optical microscope images.
 
-Advanced 2D nanomaterial thickness detection software specifically designed for hexagonal boron nitride (h-BN) analysis. This application provides accurate thickness measurements based on optical microscopy color analysis with real-time hover detection.
+Current focus material: hBN (hexagonal boron nitride).
 
-## Features
+## What this version delivers
 
-### 🔬 **Accurate Thickness Detection**
-- **Monolayer detection**: ~0.33 nm (very light blue/transparent)
-- **Bilayer detection**: ~0.66 nm (light blue)
-- **Trilayer detection**: ~1.0 nm (blue)
-- **Few layers**: 1.3-3.3 nm (blue to green transition)
-- **Bulk material**: >3.3 nm (yellow to white)
+1. Next.js frontend for end-user workflow.
+2. FastAPI backend for image analysis and mapping lifecycle.
+3. Material-aware mapping check and upload flow.
+4. Mock hBN mapping to unblock prototyping.
+5. Synthetic sample image generation for tests/demos.
+6. Electron desktop shell support.
 
-### 🎨 **Advanced Color Analysis**
-- Real-time HSL and LAB color space analysis
-- Enhanced background subtraction
-- Confidence scoring for measurements
-- Precise color shade detection
+## Repository structure
 
-### 🖥️ **Modern User Interface**
-- Drag-and-drop image upload
-- Real-time hover analysis with visual indicators
-- Layer-specific filtering
-- Interactive layer guide
-- Responsive design with gradient backgrounds
+- frontend: Next.js application.
+- backend: FastAPI service, analysis logic, and tests.
+- sample_data: mapping template and generated sample images.
+- docs: architecture and implementation plan markdown.
+- src: Electron main/preload and legacy static app files.
 
-### ⚡ **Performance Optimized**
-- Throttled analysis for smooth performance
-- Efficient image processing algorithms
-- Real-time visual feedback
+## Scientific method grounding
 
-## Scientific Background
+This implementation follows the common optical contrast idea used in 2D material layer identification:
 
-### HBN Material Properties
+1. Extract grayscale intensity from RGB.
+2. Estimate substrate intensity.
+3. Compute optical contrast ratio between flake and substrate.
+4. Match color and contrast against material-specific calibration mapping.
 
-Hexagonal boron nitride is a 2D material similar to graphene but with unique optical properties that allow thickness determination through color analysis:
+References provided by project owner were reviewed at high level. Access limitations prevented full-text extraction for some sources, but the implemented pipeline aligns with the color/contrast calibration approach and is designed to be replaced by lab-calibrated mappings.
 
-| Layer Type | Thickness (nm) | Color Characteristics | Optical Properties |
-|------------|----------------|----------------------|-------------------|
-| Monolayer | 0.33 | Very light blue, high transparency | Weak optical contrast |
-| Bilayer | 0.66 | Light blue | Moderate optical contrast |
-| Trilayer | 1.0 | Blue | Strong optical contrast |
-| Few Layers | 1.3-3.3 | Blue to green transition | Variable contrast |
-| Bulk | >3.3 | Yellow to white | High optical density |
+## Backend API
 
-### Analysis Algorithm
+Base URL: http://127.0.0.1:8000
 
-The software uses a multi-parameter analysis approach:
+1. GET /health
+2. GET /materials
+3. GET /materials/{material}/mapping/status
+4. POST /materials/{material}/mapping/upload
+5. POST /analyze
 
-1. **Color Space Conversion**: RGB → HSL and LAB for comprehensive analysis
-2. **Background Detection**: Advanced substrate identification
-3. **Layer Classification**: HSL-based thickness estimation with confidence scoring
-4. **Confidence Assessment**: Multi-parameter validation for accuracy
+Analyze endpoint inputs:
+- image: multipart file
+- material: string
+- x, y: probe pixel
+- roi_json: optional ROI
+- substrate_roi_json: optional substrate ROI
 
-## Installation
+Analyze response includes:
+- pixel classification and thickness
+- confidence and contrast
+- optional ROI mean thickness and class breakdown
 
-### Prerequisites
-- Node.js (version 14 or higher)
-- npm (Node Package Manager)
+## Mapping format
 
-### Setup
+See sample_data/mappings/hbn_mapping_template.json.
+
+Required top-level fields:
+- material
+- version
+- source
+- entries
+
+Each entry contains:
+- label
+- thickness_nm
+- confidence_hint
+- color_range (r/g/b min/max)
+- contrast_range (min/max)
+
+## Quick start
+
+### 1) Backend setup
+
 ```bash
-# Clone or download the project
-cd segApp
+cd backend
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+python scripts/generate_mock_samples.py
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
 
-# Install dependencies
+### 2) Frontend setup
+
+```bash
+cd frontend
 npm install
-
-# Start the application
-npm start
+copy .env.example .env.local
+npm run dev
 ```
 
-## Usage Guide
+### 3) Combined dev orchestration (from repo root)
 
-### 1. **Image Upload**
-- **Drag & Drop**: Simply drag your microscopy image into the upload area
-- **File Selector**: Click "Choose File" to browse and select an image
-- **Supported Formats**: JPG, PNG, BMP, TIFF
-
-### 2. **Real-time Analysis**
-- **Hover Detection**: Move your mouse over the image to get instant thickness measurements
-- **Color Information**: View RGB and HEX color values
-- **Confidence Indicator**: Color-coded measurement reliability
-  - 🟢 **Green**: High confidence (>70%)
-  - 🟡 **Yellow**: Medium confidence (40-70%)
-  - ⚫ **Gray**: Low confidence (<40%)
-
-### 3. **Layer Filtering**
-Use the layer filter dropdown to isolate specific thickness ranges:
-- **All Layers**: Show complete image
-- **Monolayer**: Highlight only ~0.33nm regions
-- **Bilayer**: Show ~0.66nm areas
-- **Trilayer**: Display ~1.0nm regions
-- **Few Layers**: Emphasize 1.3-3.3nm areas
-- **Bulk**: Show regions >3.3nm
-
-### 4. **Interactive Layer Guide**
-Click on any layer type in the guide to automatically filter the image to that specific thickness range.
-
-## Technical Specifications
-
-### Color Analysis Parameters
-
-#### Monolayer Detection
-- **Hue Range**: 180°-220°
-- **Saturation**: 10%-40%
-- **Lightness**: 70%-95%
-- **Confidence Threshold**: >60%
-
-#### Bilayer Detection
-- **Hue Range**: 190°-230°
-- **Saturation**: 20%-60%
-- **Lightness**: 60%-85%
-- **Confidence Threshold**: >70%
-
-#### Trilayer Detection
-- **Hue Range**: 200°-250°
-- **Saturation**: 30%-70%
-- **Lightness**: 40%-75%
-- **Confidence Threshold**: >75%
-
-#### Few Layers Detection
-- **Hue Range**: 160°-200° or 210°-260°
-- **Saturation**: 25%-80%
-- **Lightness**: 25%-70%
-- **Confidence Threshold**: >65%
-
-#### Bulk Detection
-- **Hue Range**: 40°-80° (yellow) or high lightness
-- **Saturation**: Variable
-- **Lightness**: >80% for white regions
-- **Confidence Threshold**: >60%
-
-## File Structure
-
-```
-segApp/
-├── src/
-│   ├── index.html          # Main UI structure
-│   ├── index.css           # Modern styling and animations
-│   ├── script.js           # Main application logic
-│   ├── segmentation.js     # HBN analysis algorithms
-│   └── preload.js          # Electron preload script
-├── package.json            # Dependencies and scripts
-├── forge.config.js         # Electron Forge configuration
-└── README.md              # This file
+```bash
+npm install
+npm run dev
 ```
 
-## Keyboard Shortcuts
+This starts backend, frontend, and Electron shell that loads the Next.js UI.
 
-- **Escape**: Return to upload screen (when in analysis mode)
+## Testing
 
-## Troubleshooting
+```bash
+cd backend
+python -m pytest tests
+```
 
-### Common Issues
+Tests include:
+- material listing
+- mapping status
+- pixel analysis
+- ROI analysis
 
-1. **Image not loading**
-   - Ensure the image format is supported (JPG, PNG, BMP, TIFF)
-   - Check that the file is not corrupted
-   - Try reducing image size if it's very large
+## Desktop app note
 
-2. **Inaccurate measurements**
-   - Ensure proper lighting and contrast in microscopy images
-   - Check that the substrate background is clearly visible
-   - Verify the image quality and resolution
+Electron is currently used as a shell around the web app in development.
 
-3. **Performance issues**
-   - Reduce image size for better performance
-   - Close other resource-intensive applications
-   - Ensure sufficient system memory
+Recommended production options:
+1. Keep Electron and package frontend build + managed backend runtime.
+2. Use Tauri for smaller binaries if Rust integration is acceptable.
 
-### Optimization Tips
+Given your existing codebase and team familiarity, Electron is the fastest path now.
 
-- **Image Quality**: Use high-contrast, well-lit microscopy images
-- **Resolution**: Optimal resolution is 1024x768 to 2048x1536 pixels
-- **Background**: Ensure clear substrate background for accurate analysis
-- **Lighting**: Consistent illumination across the sample
+## Current limitations and next steps
 
-## Future Enhancements
+1. Mapping values are mock defaults and must be replaced with calibrated lab data.
+2. Color normalization across camera/illumination setups is basic; stronger reconstruction/calibration can be added.
+3. No ML model training yet; current pipeline is explainable and deterministic.
+4. Add export, batch processing, and model-assisted mode in next phase.
 
-- **Export Functionality**: Save analysis results as JSON/CSV
-- **Batch Processing**: Analyze multiple images simultaneously
-- **Statistical Analysis**: Generate thickness distribution histograms
-- **Calibration Tools**: User-defined thickness standards
-- **Advanced Filtering**: Gaussian blur and noise reduction
-- **Machine Learning**: AI-enhanced layer detection
+## Related documents
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/new-analysis`)
-3. Commit changes (`git commit -am 'Add new analysis method'`)
-4. Push to branch (`git push origin feature/new-analysis`)
-5. Create a Pull Request
-
-## Scientific References
-
-1. Gorbachev, R. V. et al. "Hunting for monolayer boron nitride: optical and Raman signatures." *Small* 7, 465-468 (2011).
-2. Li, L. H. et al. "Strong oxidation resistance of atomically thin boron nitride nanosheets." *ACS Nano* 8, 1457-1462 (2014).
-3. Watanabe, K. & Taniguchi, T. "Direct-bandgap properties and evidence for ultraviolet lasing of hexagonal boron nitride single crystal." *Nature Materials* 3, 404-409 (2004).
-
-## License
-
-MIT License - See LICENSE file for details
-
-## Acknowledgments
-
-- Scientific community for HBN optical property research
-- Electron framework for cross-platform desktop applications
-- Contributors to the nanomaterial analysis field
-
----
-
-**Made with ❤️ for the 2D materials research community**
+- docs/architecture.md
+- docs/implementation-plan.md
