@@ -118,3 +118,7 @@ def classify_roi(
         labels[best.label] = labels.get(best.label, 0) + 1
 
     return mean_intensity, float(np.mean(thicknesses)), labels
+
+
+def closest_mapping_entry_by_thickness(mapping: MaterialMapping, thickness_nm: float) -> MappingEntry:
+    return min(mapping.entries, key=lambda entry: abs(entry.thickness_nm - thickness_nm))

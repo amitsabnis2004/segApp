@@ -28,6 +28,7 @@ class ContrastRange(BaseModel):
 
 class MappingEntry(BaseModel):
     label: str
+    color_group: str = "Unknown"
     thickness_nm: float = Field(ge=0)
     confidence_hint: float = Field(ge=0, le=1)
     color_range: ColorRange
@@ -55,8 +56,16 @@ class PixelEstimation(BaseModel):
     rgb: list[int]
     contrast: float
     label: str
+    color_group: str
     thickness_nm: float
     confidence: float
+
+
+class ModelEstimation(BaseModel):
+    enabled: bool
+    thickness_nm: float | None = None
+    confidence: float | None = None
+    color_group: str | None = None
 
 
 class AnalyzeResponse(BaseModel):
@@ -65,6 +74,7 @@ class AnalyzeResponse(BaseModel):
     image_size: dict[str, int]
     substrate_intensity: float
     pixel_result: PixelEstimation
+    model_result: ModelEstimation | None = None
     roi_mean_intensity: float | None = None
     roi_mean_thickness_nm: float | None = None
     roi_label_breakdown: dict[str, int] | None = None
