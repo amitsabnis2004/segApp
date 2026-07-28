@@ -6,6 +6,15 @@
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
+    "dev": "concurrently -n backend,frontend,desktop -c cyan,green,magenta \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run dev:desktop\"",
+    "dev:backend": "python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:desktop": "wait-on tcp:3000 && cross-env ELECTRON_START_URL=http://127.0.0.1:3000 electron-forge start",
+    "test:backend": "pytest backend/tests",
+    "samples:generate": "python backend/scripts/generate_mock_samples.py",
+    "docker:build": "docker compose build",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
@@ -18,6 +27,8 @@
   },
   "license": "MIT",
   "dependencies": {
+    "concurrently": "^9.2.1",
+    "cross-env": "^7.0.3",
     "electron-squirrel-startup": "^1.0.1"
   },
   "devDependencies": {
@@ -29,6 +40,7 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.7.0",
     "@electron-forge/plugin-fuses": "^7.7.0",
     "@electron/fuses": "^1.8.0",
-    "electron": "34.3.0"
+    "electron": "34.3.0",
+    "wait-on": "^8.0.3"
   }
 }

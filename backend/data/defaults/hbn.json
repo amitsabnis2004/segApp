@@ -1,0 +1,98 @@
+{
+  "material": "hbn",
+  "version": "0.1-mock",
+  "source": "mock",
+  "notes": "Mock color/contrast mapping for hBN on SiO2/Si. Replace with calibrated lab data.",
+  "entries": [
+    {
+      "label": "Monolayer",
+      "color_group": "Light Blue",
+      "thickness_nm": 0.33,
+      "confidence_hint": 0.9,
+      "color_range": {
+        "r_min": 175,
+        "r_max": 230,
+        "g_min": 185,
+        "g_max": 240,
+        "b_min": 205,
+        "b_max": 255
+      },
+      "contrast_range": {
+        "min": -0.08,
+        "max": -0.01
+      }
+    },
+    {
+      "label": "Bilayer",
+      "color_group": "Blue",
+      "thickness_nm": 0.66,
+      "confidence_hint": 0.92,
+      "color_range": {
+        "r_min": 150,
+        "r_max": 210,
+        "g_min": 165,
+        "g_max": 225,
+        "b_min": 190,
+        "b_max": 250
+      },
+      "contrast_range": {
+        "min": -0.14,
+        "max": -0.06
+      }
+    },
+    {
+      "label": "Trilayer",
+      "color_group": "Purple-Blue",
+      "thickness_nm": 1.0,
+      "confidence_hint": 0.95,
+      "color_range": {
+        "r_min": 120,
+        "r_max": 185,
+        "g_min": 145,
+        "g_max": 210,
+        "b_min": 180,
+        "b_max": 245
+      },
+      "contrast_range": {
+        "min": -0.2,
+        "max": -0.11
+      }
+    },
+    {
+      "label": "Few Layers",
+      "color_group": "Green",
+      "thickness_nm": 2.2,
+      "confidence_hint": 0.88,
+      "color_range": {
+        "r_min": 90,
+        "r_max": 160,
+        "g_min": 120,
+        "g_max": 190,
+        "b_min": 150,
+        "b_max": 220
+      },
+      "contrast_range": {
+        "min": -0.3,
+        "max": -0.18
+      }
+    },
+    {
+      "label": "Bulk",
+      "color_group": "Yellow",
+      "thickness_nm": 5.0,
+      "confidence_hint": 0.82,
+      "color_range": {
+        "r_min": 150,
+        "r_max": 240,
+        "g_min": 130,
+        "g_max": 210,
+        "b_min": 80,
+        "b_max": 170
+      },
+      "contrast_range": {
+        "min": -0.45,
+        "max": -0.25
+      }
+    }
+  ]
+}

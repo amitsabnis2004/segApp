@@ -1,0 +1,25 @@
+{
+  "material": "hbn",
+  "version": "lab-calibrated-2026-03-18",
+  "source": "calibrated",
+  "notes": "Replace mock ranges with calibrated measurements for your microscope/camera/illuminant stack.",
+  "entries": [
+    {
+      "label": "Monolayer",
+      "thickness_nm": 0.33,
+      "confidence_hint": 0.95,
+      "color_range": {
+        "r_min": 170,
+        "r_max": 220,
+        "g_min": 180,
+        "g_max": 235,
+        "b_min": 200,
+        "b_max": 255
+      },
+      "contrast_range": {
+        "min": -0.08,
+        "max": -0.02
+      }
+    }
+  ]
+}

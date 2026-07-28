@@ -1,0 +1,11 @@
+{
+  "samples": 10000,
+  "image_shape": [
+    32,
+    32,
+    3
+  ],
+  "csv": "sample_data/mock_hbn/hbn_mock_train_10000.csv",
+  "npz": "sample_data/mock_hbn/hbn_mock_images_10000.npz",
+  "preview_images": "sample_data/mock_hbn/preview_images"
+}
